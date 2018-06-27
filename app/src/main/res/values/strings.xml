@@ -6,5 +6,12 @@
         <item>C</item>
         <item>D</item>
     </string-array>
+    <string-array name="subject">
+        <item>Java</item>
+        <item>Sys.Prog.</item>
+        <item>Algo</item>
+        <item>C.G.</item>
+        <item>C.S.</item>>
+    </string-array>
 </resources>
 

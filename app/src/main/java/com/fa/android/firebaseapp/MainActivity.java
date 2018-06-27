@@ -34,7 +34,7 @@ import java.security.Permission;
 public class MainActivity extends AppCompatActivity {
 
     Button Choose,Upload,clear;
-    Spinner spin;
+    Spinner spin,spin2;
     Uri fileUri;
     String tempFile;
 
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseStorage storage;
     FirebaseDatabase database;
 
-    String a,b,c,d,e;
+    String a,b,c,d,e,f;
 
 
     ProgressDialog progressDialog;
@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         clear=(Button) findViewById(R.id.button12);
 
         spin=(Spinner) findViewById(R.id.spinner);
+
+        spin2=(Spinner) findViewById(R.id.spinner2);
 
         final EditText m1=(EditText) findViewById(R.id.editText9);
         final EditText m2=(EditText) findViewById(R.id.editText10);
@@ -94,6 +96,27 @@ public class MainActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> arg0) {
 
                 e="A";
+            }
+        });
+
+
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, getResources()
+                .getStringArray(R.array.subject));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin2.setAdapter(adapter2);
+        spin2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int position, long id) {
+
+                f =arg0.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+                f="None";
             }
         });
 
@@ -151,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
                // m5.setText("");
                 f1.setText("");
                 spin.setSelection(0);
+                spin2.setSelection(0);
             }
         });
     }
@@ -173,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
         progressDialog=new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setTitle("Uploading File....");
+        progressDialog.setCancelable(false);
         progressDialog.setProgress(0);
         progressDialog.show();
 
@@ -195,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         filename+=ext;
         String dir=e.toUpperCase();
         final StorageReference storageReference=storage.getReference();
-        storageReference.child(dir).child(filename).putFile(fileUri)
+        storageReference.child(f).child(dir).child(filename).putFile(fileUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -228,7 +253,8 @@ public class MainActivity extends AppCompatActivity {
     void selectfile()
     {
         Intent intent=new Intent();
-        intent.setType("application/");
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent,86);
     }
